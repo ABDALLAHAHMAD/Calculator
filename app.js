@@ -4,6 +4,7 @@ class Calculator {
      this.previousOperandTextElement = previousOperandTextElement
      this.currentOperandTextElement = currentOperandTextElement
      this.clear()
+    //  this.convertCurrency()
    }
    // Clear Function
    clear() {
@@ -24,12 +25,45 @@ class Calculator {
    chooseOperation(operation) {
      if (this.currentOperand === '') return
      if (this.previousOperand !== '') {
-       this.process() // Define Function for Processes 
+       this.process()  // Define Function for Processes 
      }
      this.operation = operation
      this.previousOperand = this.currentOperand
      this.currentOperand = ''
    }
+    //  Convert Currency function From Dollars to Shekels
+    convertCurrencyToShekels() {
+     const doToSh = parseFloat(this.currentOperand) * 3.43467;
+     console.log(doToSh);
+     this.previousOperand = '';
+     this.operation = undefined
+     this.currentOperand = `${doToSh.toFixed(1)} ₪`;
+    }
+    // Convert Currency from Shekels To Dollars
+    convertCurrencyFromShekelsToDollars() {
+      const shToDo = parseFloat(this.currentOperand) / 3.43467;
+      console.log(shToDo);
+      this.previousOperand = '';
+      this.operation = undefined
+      this.currentOperand = `${shToDo.toFixed(1)} $`;
+    }
+    // Convert Currency from Shekels to  Euros
+    convertCurrencyShekelsToEuros() {
+      const shToEu = parseFloat(this.currentOperand) / 3.92513  ;
+      console.log(shToEu);
+      this.previousOperand = '';
+      this.operation = undefined
+      this.currentOperand = `${shToEu.toFixed(1)} €`;
+    }
+    // Convert Currency from Euros To Shekels
+    convertCurrencyEurosToShekels() {
+      const euToSh = parseFloat(this.currentOperand) * 3.92513;
+      console.log(euToSh);
+      this.previousOperand = '';
+      this.operation = undefined;
+      this.currentOperand = `${euToSh.toFixed(1)} ₪`;
+    }
+    
    // Processes Function
    process() {
      let processing
@@ -48,6 +82,9 @@ class Calculator {
          break
        case '/':
          processing = prev / current
+         if(current === 0) {
+           alert("Can't divide by Zero");
+         }
          break
        default:
          return
@@ -61,7 +98,7 @@ class Calculator {
      const stringNumber = number.toString()
      const integerDigits = parseFloat(stringNumber.split('.')[0])
      const decimalDigits = stringNumber.split('.')[1]
-     let integerDisplay
+     let integerDisplay;
      if (isNaN(integerDigits)) {
        integerDisplay = ''
      } else {
@@ -84,6 +121,7 @@ class Calculator {
        this.previousOperandTextElement.innerText = ''
      }
    }
+   
  }
  
 //  Define Vars From index.html through DOM
@@ -94,7 +132,10 @@ class Calculator {
  const allClearButton = document.querySelector('[data-all-clear]')
  const previousOperandTextElement = document.querySelector('[data-previous-operand]')
  const currentOperandTextElement = document.querySelector('[data-current-operand]')
-
+ const doSH = document.querySelector('.DO-SH'); 
+ const shDO = document.querySelector('.SH-DO'); 
+ const shEU = document.querySelector('.SH-EU'); 
+ const euSH = document.querySelector('.EU-SH'); 
  // Create Object  
  const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
  
@@ -130,3 +171,25 @@ class Calculator {
    calculator.delete()
    calculator.updateDisplay()
  })
+
+//  convert currency function from Dollars to shekels
+doSH.addEventListener('click', function() {
+  calculator.convertCurrencyToShekels();
+  calculator.updateDisplay(); 
+})
+// convert currency function from Shekels to Dollars
+shDO.addEventListener('click', function() {
+  calculator.convertCurrencyFromShekelsToDollars();
+  calculator.updateDisplay();
+})
+
+// Convert Currency function From shekels to Euros
+shEU.addEventListener('click', function() {
+  calculator.convertCurrencyShekelsToEuros();
+  calculator.updateDisplay();
+})
+// Convert Currency function from Euros To Shekels
+euSH.addEventListener('click', function() {
+  calculator.convertCurrencyEurosToShekels();
+  calculator.updateDisplay();
+})
